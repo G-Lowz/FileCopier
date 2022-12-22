@@ -17,7 +17,7 @@ namespace WinFormsApp3
      * 1. Save last source and detination folders.
      * 2. Use the last saved folders when frorm loads.
      * 3. Future: delete files except last X days - have option to choose number of files to leave
-     * 4. Show countdown timer
+     * 4. Show countdown timer - 22/12/22
      */
     public partial class File_Copier : Form
     {
@@ -27,8 +27,6 @@ namespace WinFormsApp3
         private FileInfo[] _compareList = new FileInfo[500];
         private List<string> _compareListSorted = new List<string>();
         private string fileName;
-        //private string dateTimeOfNextSave;
-        //private bool dateTimeReset;
         private double _time;
         private static System.Timers.Timer aTimer;
         // Initialising...
@@ -98,7 +96,7 @@ namespace WinFormsApp3
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
             aTimer.Start();
-            NextLabel.Text = DateTime.Now.AddDays(_t/(360*24)).ToString();
+            NextLabel.Text = DateTime.Now.AddDays(double.Parse(TimeBox.Text)).ToString(); 
         }
 
         private void CopyFilesToFolder(Object sender, ElapsedEventArgs e, string _fk, string _sp, string _tp) 
@@ -145,6 +143,7 @@ namespace WinFormsApp3
                     MessageBox.Show($"Error : {e1}");
                 }
             }
+            this.NextLabel.Invoke((MethodInvoker)delegate { NextLabel.Text = DateTime.Now.AddDays(double.Parse(TimeBox.Text)).ToString(); });
         }
 
         private void StopButton_Click(object sender, EventArgs e)

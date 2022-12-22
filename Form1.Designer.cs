@@ -138,7 +138,7 @@ namespace WinFormsApp3
             this.TimeBox.Name = "TimeBox";
             this.TimeBox.Size = new System.Drawing.Size(118, 23);
             this.TimeBox.TabIndex = 8;
-            this.TimeBox.Text = "0.00015117";
+            this.TimeBox.Text = "0.00115740740";
             // 
             // label3
             // 
