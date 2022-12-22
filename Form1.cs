@@ -27,6 +27,8 @@ namespace WinFormsApp3
         private FileInfo[] _compareList = new FileInfo[500];
         private List<string> _compareListSorted = new List<string>();
         private string fileName;
+        //private string dateTimeOfNextSave;
+        //private bool dateTimeReset;
         private double _time;
         private static System.Timers.Timer aTimer;
         // Initialising...
@@ -96,8 +98,9 @@ namespace WinFormsApp3
             aTimer.AutoReset = true;
             aTimer.Enabled = true;
             aTimer.Start();
-            NextLabel.Text = DateTime.Now.AddDays(double.Parse(TimeBox.Text)).ToString();
+            NextLabel.Text = DateTime.Now.AddDays(_t/(360*24)).ToString();
         }
+
         private void CopyFilesToFolder(Object sender, ElapsedEventArgs e, string _fk, string _sp, string _tp) 
         {
             _tempListSorted.Clear();
@@ -111,10 +114,10 @@ namespace WinFormsApp3
                 for (int i = 0; i < _tempList.Length; i++)
                 {
                     string s = _tempList[i].Name.ToString().ToLower();
-                    for (int j = 0; j < (s.Length - FileKeyword.Text.Length); j++)
+                    for (int j = 0; j < (s.Length - _fk.Length); j++)
                     {
-                        string y = s.Substring(j, FileKeyword.Text.Length);
-                        if (y == FileKeyword.Text.ToLower())
+                        string y = s.Substring(j, _fk.Length);
+                        if (y == _fk.ToLower())
                         {
                             _tempListSorted.Add(_tempList[i].ToString());
                             _tempListFileNames.Add(_tempList[i].Name.ToString());
@@ -125,27 +128,25 @@ namespace WinFormsApp3
             for (int i = 0; i < _tempListSorted.Count; i++)
             {
                 fileName = _tempListFileNames[i].ToString();
-                string sourcePath = SourcePath.Text.Trim();
-                string targetPath = TargetPath.Text.Trim();
+                string sourcePath = _sp.Trim();
+                string targetPath = _tp.Trim();
 
                 string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
-                string destFile = System.IO.Path.Combine(targetPath, fileName);     
+                string destFile = System.IO.Path.Combine(targetPath, fileName);
                 try
                 {
                     if (System.IO.File.Exists(sourceFile))
                     {
                         System.IO.File.Copy(sourceFile, destFile, true);
-
                     }
-
                 }
                 catch (Exception e1)
                 {
                     MessageBox.Show($"Error : {e1}");
                 }
             }
-            //NextLabel.Text = DateTime.Now.AddDays(double.Parse(TimeBox.Text)).ToString();
         }
+
         private void StopButton_Click(object sender, EventArgs e)
         {
             aTimer.Stop();
